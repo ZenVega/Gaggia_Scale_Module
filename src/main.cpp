@@ -4,40 +4,46 @@
 #define SCALE_1_CAL 2695
 #define SCALE_2_CAL -2561.7
 
+#define ROTARY_DIR 2
+#define ROTARY_CLK 3
 #define ROTARY_SWITCH_PIN 4
+#define START_STOP 6
 #define LOADCELL_SCK_PIN 9
 #define LOADCELL_DOUT_PIN_1 10
 #define LOADCELL_DOUT_PIN_2 11
 
+float         target_timer = 10;
+float         timer = 10;
+int           currentStateCLK;
+int           lastStateCLK;
+String        currentDir = "";
+unsigned long lastButtonPress = 0;
+int          running = 0;
+float         scale_1_reading;
+float         scale_2_reading;
+int btnState = 1;
+
 HX711 scale_1;
 HX711 scale_2;
+
 void setup() {
   pinMode(ROTARY_SWITCH_PIN, INPUT_PULLUP);
-
+  pinMode(ROTARY_CLK,INPUT);
+	pinMode(ROTARY_DIR,INPUT);
+	pinMode(START_STOP,INPUT);
+  
   Serial.begin(57600);
   Serial.println("HX711 Demo");
   Serial.println("Initializing the scale");
 
   scale_1.begin(LOADCELL_DOUT_PIN_1, LOADCELL_SCK_PIN);
   scale_2.begin(LOADCELL_DOUT_PIN_2, LOADCELL_SCK_PIN);
-
-  Serial.println(scale_1.read());      // print a raw reading from the ADC
-  Serial.println(scale_2.read());      // print a raw reading from the ADC
-
-  Serial.print("read average: \t\t");
-  Serial.println(scale_1.read_average(20));   // print the average of 20 readings from the ADC
-  Serial.println(scale_2.read_average(20));   // print the average of 20 readings from the ADC
-
-  Serial.print("get value: \t\t");
-  Serial.println(scale_1.get_value(5));   // print the average of 5 readings from the ADC minus the tare weight (not set yet)
-  Serial.println(scale_2.get_value(5));   // print the average of 5 readings from the ADC minus the tare weight (not set yet)
-
   scale_1.set_scale(SCALE_1_CAL);
   scale_2.set_scale(SCALE_2_CAL);
-  
   scale_1.tare();
   scale_2.tare();
 
+  lastStateCLK = digitalRead(ROTARY_CLK);
 //scale.read() - get raw reading
 //scale.read_average(20)); - get average of 20 readings from the ADC
 //scale.get_value(5)); - get the average of 5 readings from the ADC minus the tare weight, set with tare()
@@ -47,22 +53,45 @@ void setup() {
 }
 
 void loop() {
-  int btnState = digitalRead(ROTARY_SWITCH_PIN);
+  btnState = digitalRead(ROTARY_SWITCH_PIN);
+  scale_1_reading = scale_1.get_units();
+  scale_2_reading = scale_2.get_units();
+  if (digitalRead(START_STOP) == LOW){
+    Serial.print("~~~ START ~~~\n");
+    running = 1;
+  }
+  while (running){
+    scale_1_reading = scale_1.get_units();
+    scale_2_reading = scale_2.get_units();
+    if ( digitalRead(START_STOP) == LOW || scale_1_reading + scale_2_reading > target_timer){
+      Serial.print("~~~ STOP ~~~\n");
+      delay(500);
+      running = 0;
+    }
+    Serial.print("RUNNING:\t | ");
+    Serial.print(scale_1_reading + scale_2_reading);
+    Serial.print(" / ");
+    Serial.print(target_timer);
+    Serial.print(" grams\n");
+    delay(300);
+  }
+  currentStateCLK = digitalRead(ROTARY_DIR);
+	if (currentStateCLK != lastStateCLK  && currentStateCLK == 1){
+		if (digitalRead(ROTARY_DIR) != currentStateCLK) {
+			target_timer += .5;
+		} else {
+			target_timer -= .5;
+		}
+		Serial.print("SCALE TARGET: ");
+		Serial.print(target_timer);
+    Serial.print(" grams\n");
+    lastStateCLK = currentStateCLK;
+	}
 
 	if (btnState == LOW) {
     scale_1.tare();
     scale_2.tare();
-    Serial.print("~~~ TARE ~~~");
+    Serial.print("~~~ TARE ~~~\n");
   }
-
-  float scale_1_reading = scale_1.get_units();
-  float scale_2_reading = scale_2.get_units();
-  Serial.print("scale_1:\t");
-  Serial.print(scale_1_reading);
-  Serial.print("\t| scale_2:\t");
-  Serial.print(scale_2_reading);
-  Serial.print("\t| total:\t");
-  Serial.print(scale_1_reading + scale_2_reading);
-  Serial.print("\n");
-  delay(2000);
+  lastStateCLK = digitalRead(ROTARY_CLK);
 }
