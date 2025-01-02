@@ -7,6 +7,9 @@ float         scale_1_reading;
 float         scale_2_reading;
 int           btnState = 1;
 float         target_timer = 10;
+float start_time;
+float current_time;
+float stop_time;
 
 HX711 scale_1;
 HX711 scale_2;
@@ -25,11 +28,6 @@ void setup() {
   scale_1.tare();
   scale_2.tare();
 
-//scale.read() - get raw reading
-//scale.read_average(20)); - get average of 20 readings from the ADC
-//scale.get_value(5)); - get the average of 5 readings from the ADC minus the tare weight, set with tare()
-//scale.get_units(5), 1); - get the average of 5 readings from the ADC minus tare weight, divided by the SCALE parameter set with set_scale
-
   Serial.println("Readings:");
 }
 
@@ -43,9 +41,13 @@ void loop() {
     Serial.print("~~~ START ~~~\n");
     running = 1;
     delay(1000);
+    start_time = millis() / 1000;
+    Serial.print(start_time);
+    Serial.print(" seconds\n");
   }
 
   while (running){
+    current_time = millis();
     scale_1_reading = scale_1.get_units();
     scale_2_reading = scale_2.get_units();
     Serial.print("RUNNING:\t | ");
@@ -53,8 +55,13 @@ void loop() {
     Serial.print(" / ");
     Serial.print(target_timer);
     Serial.print(" grams\n");
+    Serial.print((current_time - start_time) / 1000);
+    Serial.print(" seconds\n");
     if ( digitalRead(START_STOP) == LOW || scale_1_reading + scale_2_reading > target_timer){
-      Serial.print("~~~ STOP ~~~\n");
+      stop_time = current_time - start_time;
+      Serial.print("STOPPED AT ");
+      Serial.print(stop_time / 1000);
+      Serial.print(" seconds\n");
       running = 0;
       delay(1000);
     }
