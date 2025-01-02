@@ -1,5 +1,6 @@
 #include "constants.h"
 #include "rotary_encoder/rotary_encoder.h"
+#include "oled/oled.h"
 
 unsigned long lastButtonPress = 0;
 int           running = 0;
@@ -14,12 +15,15 @@ float stop_time;
 HX711 scale_1;
 HX711 scale_2;
 
+
 void setup() {
 	pinMode(START_STOP,INPUT);
+  init_oled();
 
   Serial.begin(57600);
 
   init_rotary(target_timer);
+  start_screen();
 
   scale_1.begin(LOADCELL_DOUT_PIN_1, LOADCELL_SCK_PIN);
   scale_2.begin(LOADCELL_DOUT_PIN_2, LOADCELL_SCK_PIN);
@@ -44,6 +48,8 @@ void loop() {
     start_time = millis() / 1000;
     Serial.print(start_time);
     Serial.print(" seconds\n");
+    //display.fillScreen(cb);
+    //display.display();
   }
 
   while (running){
@@ -63,6 +69,8 @@ void loop() {
       Serial.print(stop_time / 1000);
       Serial.print(" seconds\n");
       running = 0;
+      //display.fillScreen(cw);
+      //display.display();
       delay(1000);
     }
     delay(300);
