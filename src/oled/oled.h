@@ -10,6 +10,7 @@
 
 void init_oled();
 void start_screen();
+void    show_rest_screen(float weight, float target_weight);
 
 //ICONS
 const unsigned char arrow_up_icon16x16[] =

@@ -6,7 +6,7 @@
 unsigned long lastButtonPress = 0;
 int           running = 0;
 int           btnState = 1;
-float         target_timer = 10;
+float         target_weight = 0;
 float         start_time;
 float         current_time;
 float         stop_time;
@@ -18,7 +18,7 @@ void setup() {
 	pinMode(START_STOP,INPUT);
 
   init_oled();
-  init_rotary(target_timer);
+  init_rotary(target_weight);
   start_screen();
   init_scale();
 
@@ -27,14 +27,15 @@ void setup() {
 
 void loop() {
   btnState = digitalRead(ROTARY_SWITCH_PIN);
-  target_timer = check_rotary(Serial, target_timer);
+  target_weight = check_rotary(Serial, target_weight);
   weight = get_weight();
+  show_rest_screen(weight, target_weight);
 
   if (digitalRead(START_STOP) == LOW){
     Serial.print("~~~ START ~~~\n");
     running = 1;
     delay(1000);
-    start_time = millis() / 1000;
+    start_time = millis();
     Serial.print(start_time);
     Serial.print(" seconds\n");
   }
@@ -45,11 +46,11 @@ void loop() {
     Serial.print("RUNNING:\t | ");
     Serial.print(weight);
     Serial.print(" / ");
-    Serial.print(target_timer);
+    Serial.print(target_weight);
     Serial.print(" grams\n");
-    Serial.print((current_time - start_time) / 1000);
+    Serial.print((current_time - start_time) / 1000 );
     Serial.print(" seconds\n");
-    if ( digitalRead(START_STOP) == LOW || weight > target_timer){
+    if ( digitalRead(START_STOP) == LOW || weight > target_weight){
       stop_time = current_time - start_time;
       Serial.print("STOPPED AT ");
       Serial.print(stop_time / 1000);

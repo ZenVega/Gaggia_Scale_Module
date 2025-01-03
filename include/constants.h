@@ -9,7 +9,7 @@
 #define ROTARY_SWITCH_PIN 4
 #define EEPROM_INIT_FLAG_ADDR 4  // EEPROM address for initialization flag
 #define EEPROM_INIT_FLAG 123
-#define TARGET_TIMER_ADDR 0      // EEPROM address for target_timer
+#define TARGET_TIMER_ADDR 0      // EEPROM address for target_weight
 
 //START/STOP
 #define START_STOP 6

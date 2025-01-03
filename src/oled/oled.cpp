@@ -1,5 +1,9 @@
 #include "oled.h"
 #include "constants.h"
+#include <Fonts/FreeMono9pt7b.h>
+#include <Fonts/FreeSans9pt7b.h>
+#include <Fonts/Org_01.h>
+#include <Fonts/Picopixel.h>
 
 int cw = SSD1306_WHITE;
 int cb = SSD1306_BLACK;
@@ -13,10 +17,37 @@ void init_oled()
         for(;;);
     }
     display.setTextColor(cw, cb);
+    display.setFont(&Org_01);
     display.clearDisplay();
     display.display();
 }
 
+void    show_rest_screen(float weight, float target_weight)
+{
+    display.setCursor(70, 10);
+    display.setTextSize(2);
+    display.print(target_weight, 1);
+    display.println("g");
+    display.setTextSize(4);
+    if (weight > -0.1 && weight < 0.1)
+        weight = 0;
+    if (weight < 0)
+    {
+        display.setCursor(-5, 50);
+        display.print("-");
+        weight = -weight;
+    }
+    display.setCursor(15, 50);
+    //weight *= 10;
+    //int weight_int = (int)weight;
+    //weight = (float)weight_int;
+    //weight /= 10;
+    display.print(weight, 1);
+    display.setTextSize(2);
+    display.println("g");
+    display.display();
+    display.clearDisplay();
+}
 void start_screen()
 {
     display.clearDisplay();
@@ -50,13 +81,12 @@ void start_screen()
     display.display();
 
  // Welcome Text   
-    if (1)
+    if (0)
     {
-        
         char msg_1[] =  "Coffee";
         char msg_2[] =  "Time";
         int delay_time = 50;
-        display.setTextSize(2); 
+        display.setTextSize(1); 
         display.clearDisplay();
         display.display();
         int y = 0;
