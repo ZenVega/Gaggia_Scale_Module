@@ -10,7 +10,7 @@ int cb = SSD1306_BLACK;
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-void init_oled()
+void    init_oled()
 {
     if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
         Serial.println(F("SSD1306 allocation failed"));
@@ -22,49 +22,39 @@ void init_oled()
     display.display();
 }
 
-void    tare_screen()
+void    welcome_screen()
 {
     display.clearDisplay();
-    display.setTextSize(3);
-    for(int i = 0; i < 2; i++){
-        display.setCursor(10, 40);
-        display.println("~TARE~");
+    display.display();
+
+    // LOGO fade in    
+    for(int16_t i=display.width(); i > 0; i-=4) {
+        for (int y = 0; y < 4; y++)
+            display.drawCircle(display.width()/2, display.height()/2, i + y, cw);
         display.display();
-        delay(300);
-        display.clearDisplay();
-        display.display();
-        delay(300);
+        delay(1);
     }
+
+    for(int16_t i=0; i < display.width()/3.5; i+=4) {
+        for (int y = 0; y < 4; y++)
+            display.drawCircle(display.width()/2, display.height()/2, i + y, cb);
+        display.display();
+        delay(1);
+    }
+
+    display.drawBitmap(display.width()/2 - 24, display.height()/2 - 24, coffee_mug, 48, 48, 1);
+    display.display();
+    delay(1200);
+    for(int16_t i=display.width()/3.5; i < display.width(); i+=4) {
+        for (int y = 0; y < 4; y++)
+            display.drawCircle(display.width()/2, display.height()/2, i + y, cb);
+        display.display();
+        delay(1);
+    }
+    display.display();
 }
 
-void    running_screen(float run_time, float weight, float target_weight){
-    display.clearDisplay();
-    //TIME
-    int r_time = (int)run_time;
-    display.setTextSize(3);
-    display.setCursor(30, 14);
-    display.setTextSize(2);
-    display.print(r_time);
-    display.println(" Sec");
-
-    //WEIGHT
-    display.setCursor(10, 36);
-    display.print(weight, 1);
-    display.print("/");
-    display.print(target_weight, 1);
-    display.println("g");
-
-    //LOADING BAR
-    int height = 14;
-    int width = 108;
-    int percentage = weight / target_weight * (width - 4);
-    if(percentage > 104)
-        percentage = 104; 
-    display.drawRect(10, 50, width, height, SSD1306_WHITE);
-    display.fillRect(12, 52, percentage, height - 4, SSD1306_WHITE);
-    display.display(); 
-}
-void    show_rest_screen(float weight, float target_weight)
+void    rest_screen(float weight, float target_weight)
 {
     display.setCursor(70, 10);
     display.setTextSize(2);
@@ -95,6 +85,34 @@ void    start_screen()
     delay(700);
 }
 
+void    running_screen(float run_time, float weight, float target_weight){
+    display.clearDisplay();
+    //TIME
+    int r_time = (int)run_time;
+    display.setTextSize(3);
+    display.setCursor(30, 14);
+    display.setTextSize(2);
+    display.print(r_time);
+    display.println(" Sec");
+
+    //WEIGHT
+    display.setCursor(10, 36);
+    display.print(weight, 1);
+    display.print("/");
+    display.print(target_weight, 1);
+    display.println("g");
+
+    //LOADING BAR
+    int height = 14;
+    int width = 108;
+    int percentage = weight / target_weight * (width - 4);
+    if(percentage > 104)
+        percentage = 104; 
+    display.drawRect(10, 50, width, height, SSD1306_WHITE);
+    display.fillRect(12, 52, percentage, height - 4, SSD1306_WHITE);
+    display.display(); 
+}
+
 void    stop_screen(float stop_time)
 {
     display.clearDisplay();
@@ -111,40 +129,17 @@ void    stop_screen(float stop_time)
     delay(4500);
 }
 
-void    welcome_screen()
+void    tare_screen()
 {
     display.clearDisplay();
-    display.display();
-
-// LOGO fade in    
-    for(int16_t i=display.width(); i > 0; i-=4) {
-        for (int y = 0; y < 4; y++)
-            display.drawCircle(display.width()/2, display.height()/2, i + y, cw);
+    display.setTextSize(3);
+    for(int i = 0; i < 2; i++){
+        display.setCursor(10, 40);
+        display.println("~TARE~");
         display.display();
-        delay(1);
-    }
-
-    for(int16_t i=0; i < display.width()/3.5; i+=4) {
-        for (int y = 0; y < 4; y++)
-            display.drawCircle(display.width()/2, display.height()/2, i + y, cb);
+        delay(300);
+        display.clearDisplay();
         display.display();
-        delay(1);
+        delay(300);
     }
-
-    display.drawBitmap(display.width()/2 - 24, display.height()/2 - 24, coffee_mug, 48, 48, 1);
-    display.display();
-    delay(1200);
-    for(int16_t i=display.width()/3.5; i < display.width(); i+=4) {
-        for (int y = 0; y < 4; y++)
-            display.drawCircle(display.width()/2, display.height()/2, i + y, cb);
-        display.display();
-        delay(1);
-    }
-    display.display();
-}
-
-void    arrows()
-{
-    display.drawBitmap(0, 0, arrow_down_icon16x16, 16,16,cw);
-    display.drawBitmap(0, 0, arrow_up_icon16x16, 16,16,cw);
 }

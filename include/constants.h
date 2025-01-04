@@ -1,7 +1,6 @@
 #ifndef CONSTANTS
     #define CONSTANTS
 #include <Arduino.h>
-#include "HX711.h"
 
 //ROTARY
 #define ROTARY_A 7

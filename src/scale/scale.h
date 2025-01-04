@@ -1,5 +1,7 @@
 #ifndef SCALE_H
     #define SCALE_H
+
+    #include "constants.h"
     #include <HX711.h>
 
     void    init_scale();

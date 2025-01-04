@@ -3,40 +3,35 @@
 #include "oled/oled.h"
 #include "scale/scale.h"
 
-unsigned long lastButtonPress = 0;
-int           running = 0;
-int           btnState = 1;
-float         target_weight = 0;
-float         start_time;
-float         current_time;
-float         stop_time;
-float         weight;
+int   running = 0;
+int   btnState = 1;
+float target_weight = 0;
+float start_time;
+float current_time;
+float stop_time;
+float weight;
 
 
-void setup() {
-  Serial.begin(57600);
+void  setup() {
+  //Serial.begin(57600);
 	pinMode(START_STOP,INPUT);
 
   init_oled();
   init_rotary(target_weight);
   welcome_screen();
   init_scale();
-
-  Serial.println("Readings:");
 }
 
-void loop() {
+void  loop() {
   btnState = digitalRead(ROTARY_SWITCH_PIN);
   target_weight = check_rotary(Serial, target_weight);
   weight = get_weight();
-  show_rest_screen(weight, target_weight);
+  rest_screen(weight, target_weight);
 
   if (digitalRead(START_STOP) == LOW){
     start_screen();
     running = 1;
     start_time = millis();
-    Serial.print(start_time);
-    Serial.print(" seconds\n");
   }
 
   while (running){

@@ -1,8 +1,7 @@
 #include "scale.h"
-#include "constants.h"
 
-float         scale_1_reading;
-float         scale_2_reading;
+float   scale_1_reading;
+float   scale_2_reading;
 
 HX711   scale_1;
 HX711   scale_2;
@@ -31,5 +30,4 @@ void    tare_scale()
 {
     scale_1.tare();
     scale_2.tare();
-    Serial.print("~~~ TARE ~~~\n");
 }
