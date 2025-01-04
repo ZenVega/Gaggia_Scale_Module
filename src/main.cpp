@@ -19,7 +19,7 @@ void setup() {
 
   init_oled();
   init_rotary(target_weight);
-  start_screen();
+  welcome_screen();
   init_scale();
 
   Serial.println("Readings:");
@@ -32,9 +32,8 @@ void loop() {
   show_rest_screen(weight, target_weight);
 
   if (digitalRead(START_STOP) == LOW){
-    Serial.print("~~~ START ~~~\n");
+    start_screen();
     running = 1;
-    delay(1000);
     start_time = millis();
     Serial.print(start_time);
     Serial.print(" seconds\n");
@@ -43,22 +42,13 @@ void loop() {
   while (running){
     current_time = millis();
     weight = get_weight();
-    Serial.print("RUNNING:\t | ");
-    Serial.print(weight);
-    Serial.print(" / ");
-    Serial.print(target_weight);
-    Serial.print(" grams\n");
-    Serial.print((current_time - start_time) / 1000 );
-    Serial.print(" seconds\n");
+    float running_time = (current_time - start_time) / 1000;
+    running_screen(running_time, weight, target_weight);
     if ( digitalRead(START_STOP) == LOW || weight > target_weight){
       stop_time = current_time - start_time;
-      Serial.print("STOPPED AT ");
-      Serial.print(stop_time / 1000);
-      Serial.print(" seconds\n");
       running = 0;
-      delay(1000);
+      stop_screen(stop_time / 1000);
     }
-    delay(300);
   }
 
 	if (btnState == LOW)

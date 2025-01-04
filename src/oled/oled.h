@@ -9,8 +9,11 @@
 #include "constants.h"
 
 void	init_oled();
-void	start_screen();
+void	welcome_screen();
 void    show_rest_screen(float weight, float target_weight);
+void	start_screen();
+void    running_screen(float run_time, float weight, float target_weight);
+void    stop_screen(float stop_time);
 void    tare_screen();
 
 //ICONS

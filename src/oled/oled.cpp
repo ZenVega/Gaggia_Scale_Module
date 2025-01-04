@@ -24,6 +24,7 @@ void init_oled()
 
 void    tare_screen()
 {
+    display.clearDisplay();
     display.setTextSize(3);
     for(int i = 0; i < 2; i++){
         display.setCursor(10, 40);
@@ -35,6 +36,34 @@ void    tare_screen()
         delay(300);
     }
 }
+
+void    running_screen(float run_time, float weight, float target_weight){
+    display.clearDisplay();
+    //TIME
+    int r_time = (int)run_time;
+    display.setTextSize(3);
+    display.setCursor(30, 14);
+    display.setTextSize(2);
+    display.print(r_time);
+    display.println(" Sec");
+
+    //WEIGHT
+    display.setCursor(10, 36);
+    display.print(weight, 1);
+    display.print("/");
+    display.print(target_weight, 1);
+    display.println("g");
+
+    //LOADING BAR
+    int height = 14;
+    int width = 108;
+    int percentage = weight / target_weight * (width - 4);
+    if(percentage > 104)
+        percentage = 104; 
+    display.drawRect(10, 50, width, height, SSD1306_WHITE);
+    display.fillRect(12, 52, percentage, height - 4, SSD1306_WHITE);
+    display.display(); 
+}
 void    show_rest_screen(float weight, float target_weight)
 {
     display.setCursor(70, 10);
@@ -42,8 +71,6 @@ void    show_rest_screen(float weight, float target_weight)
     display.print(target_weight, 1);
     display.println("g");
     display.setTextSize(4);
-    if (weight > -0.1 && weight < 0.1)
-        weight = 0;
     if (weight < 0)
     {
         display.setCursor(-5, 50);
@@ -58,7 +85,33 @@ void    show_rest_screen(float weight, float target_weight)
     display.clearDisplay();
 }
 
-void start_screen()
+void    start_screen()
+{
+    display.clearDisplay();
+    display.setTextSize(3);
+    display.setCursor(0, 40);
+    display.println("~START~");
+    display.display();
+    delay(700);
+}
+
+void    stop_screen(float stop_time)
+{
+    display.clearDisplay();
+    display.setTextSize(2);
+    display.setCursor(10, 12);
+    display.println("Brew time");
+    display.setTextSize(4);
+    display.setCursor(10, 40);
+    display.println(stop_time, 1);
+    display.setTextSize(2);
+    display.setCursor(40, 60);
+    display.println("seconds");
+    display.display();
+    delay(4500);
+}
+
+void    welcome_screen()
 {
     display.clearDisplay();
     display.display();

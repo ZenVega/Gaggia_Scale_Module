@@ -21,7 +21,10 @@ float   get_weight()
 {
   scale_1_reading = scale_1.get_units();
   scale_2_reading = scale_2.get_units();
-  return (scale_1_reading + scale_2_reading);
+  float total = scale_1_reading + scale_2_reading;
+  if( total > -0.1 && total < 0.1 )
+    total = 0;
+  return (total);
 }
 
 void    tare_scale()
