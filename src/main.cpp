@@ -62,5 +62,8 @@ void loop() {
   }
 
 	if (btnState == LOW)
+  {
     tare_scale();
+    tare_screen();
+  }
 }

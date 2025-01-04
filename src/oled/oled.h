@@ -8,9 +8,10 @@
 
 #include "constants.h"
 
-void init_oled();
-void start_screen();
+void	init_oled();
+void	start_screen();
 void    show_rest_screen(float weight, float target_weight);
+void    tare_screen();
 
 //ICONS
 const unsigned char arrow_up_icon16x16[] =
