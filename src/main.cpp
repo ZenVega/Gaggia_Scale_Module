@@ -15,6 +15,8 @@ float weight;
 void  setup() {
   //Serial.begin(57600);
 	pinMode(START_STOP,INPUT);
+	pinMode(RELAIS, OUTPUT);
+  digitalWrite(RELAIS, HIGH);
 
   init_oled();
   init_rotary(target_weight);
@@ -32,6 +34,7 @@ void  loop() {
     start_screen();
     running = 1;
     start_time = millis();
+    digitalWrite(RELAIS, LOW);
   }
 
   while (running){
@@ -40,6 +43,7 @@ void  loop() {
     float running_time = (current_time - start_time) / 1000;
     running_screen(running_time, weight, target_weight);
     if ( digitalRead(START_STOP) == LOW || weight > target_weight){
+      digitalWrite(RELAIS, HIGH);
       stop_time = current_time - start_time;
       running = 0;
       stop_screen(stop_time / 1000);
