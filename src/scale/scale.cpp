@@ -16,12 +16,34 @@ void    init_scale()
   scale_2.tare();
 }
 
+float get_median(float measurements[5])
+{
+  for (int i = 0; i < 4; i++)
+  {
+    for (int j = 0; j < 4 - i; j++)
+    {
+      if (measurements[j] > measurements[j + 1])
+      {
+        float temp = measurements[j];
+        measurements[j] = measurements[j + 1];
+        measurements[j + 1] = temp;
+      }
+    }
+  }
+  return measurements[2];
+}
+
 float   get_weight()
 {
-  scale_1_reading = scale_1.get_units();
-  scale_2_reading = scale_2.get_units();
-  float total = scale_1_reading + scale_2_reading;
-  if( total > -0.1 && total < 0.1 )
+  float mes_arr[5];
+  for (int i = 0; i < 5; i++)
+  {
+    scale_1_reading = scale_1.get_units();
+    scale_2_reading = scale_2.get_units();
+    mes_arr[i] = scale_1_reading + scale_2_reading;
+  }
+  float total = get_median(mes_arr);
+  if( total > -0.5 && total < 0.5 )
     total = 0;
   return (total);
 }

@@ -12,8 +12,9 @@ float stop_time;
 float weight;
 
 
-void  setup() {
-  //Serial.begin(57600);
+void  setup()
+{
+  Serial.begin(57600);
 	pinMode(START_STOP,INPUT);
 	pinMode(RELAIS, OUTPUT);
   digitalWrite(RELAIS, HIGH);
@@ -30,14 +31,16 @@ void  loop() {
   weight = get_weight();
   rest_screen(weight, target_weight);
 
-  if (digitalRead(START_STOP) == LOW){
+  if (digitalRead(START_STOP) == LOW)
+  {
     start_screen();
     running = 1;
     start_time = millis();
     digitalWrite(RELAIS, LOW);
   }
 
-  while (running){
+  while (running)
+  {
     current_time = millis();
     weight = get_weight();
     float running_time = (current_time - start_time) / 1000;
