@@ -2,6 +2,16 @@
 A precision scale integration for Gaggia espresso machines, solving the common problem of limited space between the portafilter and drip tray.
 ## 🎯 Project Overview
 This project was inspired by the excellent Gaggiuino Project, but focuses specifically on integrating a precision scale directly into the machine base. The built-in scale eliminates the need for external scales and maximizes the limited space in compact espresso machine setups.
+
+![image](/images/front.png)
+![image](/images/schematics.jpeg)
+![image](images/drip_isolated.jpeg)
+![image](images/scale-Build.jpeg)
+![image](images/screen_1.jpeg)
+![image](images/screen_2.jpeg)
+![image](images/terminal.jpeg)
+![image](images/terminal_cut.jpeg)
+
 ## 🔧 Hardware Components
 
  - Load Cells: Precision weight sensors mounted beneath the drip tray
