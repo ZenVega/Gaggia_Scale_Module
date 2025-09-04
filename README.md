@@ -6,11 +6,6 @@ This project was inspired by the excellent Gaggiuino Project, but focuses specif
 ![image](/images/front.png)
 ![image](/images/schematics.jpeg)
 ![image](images/drip_isolated.jpeg)
-![image](images/scale-Build.jpeg)
-![image](images/screen_1.jpeg)
-![image](images/screen_2.jpeg)
-![image](images/terminal.jpeg)
-![image](images/terminal_cut.jpeg)
 
 ## 🔧 Hardware Components
 
@@ -27,6 +22,11 @@ further components are
  - 3D Printed Mount: Custom load cell mounting system (files adapted from Gaggiuino project)
  - 3D Printed / Laser cut terminal
 
+![image](images/scale-Build.jpeg)
+![image](images/screen_1.jpeg)
+![image](images/screen_2.jpeg)
+![image](images/terminal.jpeg)
+![image](images/terminal_cut.jpeg)
 ## ⚙️ Features
 Weight Measurement
 
