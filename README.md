@@ -7,6 +7,8 @@ This project was inspired by the excellent Gaggiuino Project, but focuses specif
 ![image](/images/schematics.jpeg)
 ![image](images/drip_isolated.jpeg)
 
+For a video of the build in action follow this [link] (https://www.youtube.com/shorts/G5Hq_KEejkw)
+
 ## 🔧 Hardware Components
 
  - Load Cells: Precision weight sensors mounted beneath the drip tray
